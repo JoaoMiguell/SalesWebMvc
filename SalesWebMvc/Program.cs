@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -20,10 +22,10 @@ namespace SalesWebMvc
                     new MySqlServerVersion(new Version(8, 0, 32)),
                     builder => builder.MigrationsAssembly("SalesWebMvc")
                 ));
-            
                 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddScoped<SeedingService>();
 
             var app = builder.Build();
 
@@ -34,6 +36,13 @@ namespace SalesWebMvc
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            /*else // this seed the database
+            {
+                ServiceProvider serviceProvider = builder.Services.BuildServiceProvider();
+                SalesWebMvcContext serviceContext= serviceProvider.GetRequiredService<SalesWebMvcContext>();
+                SeedingService s = new(serviceContext.GetService<SalesWebMvcContext>());
+                s.Seed();
+            }*/
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
