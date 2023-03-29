@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SalesWebMvc.Data;
+using SalesWebMvc.Services;
 using System;
 
 namespace SalesWebMvc
@@ -25,7 +25,8 @@ namespace SalesWebMvc
                 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddScoped<SeedingService>();
+            builder.Services.AddScoped<SellerService>();
+            // builder.Services.AddScoped<SeedingService>();
 
             var app = builder.Build();
 
