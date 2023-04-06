@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -40,7 +41,7 @@ namespace SalesWebMvc
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<SellerService>();
             builder.Services.AddScoped<DepartamentService>();
-            // builder.Services.AddScoped<SeedingService>();
+            builder.Services.AddScoped<SeedingService>();
 
             var app = builder.Build();
 
@@ -53,7 +54,7 @@ namespace SalesWebMvc
             }
             /*else // this seed the database
             {
-                ServiceProvider serviceProvider = builder.Services.BuildServiceProvider();
+                ServiceProvider serviceProvider = builder.Services.BuildServiceProvider()!;
                 SalesWebMvcContext serviceContext= serviceProvider.GetRequiredService<SalesWebMvcContext>();
                 SeedingService s = new(serviceContext.GetService<SalesWebMvcContext>());
                 s.Seed();

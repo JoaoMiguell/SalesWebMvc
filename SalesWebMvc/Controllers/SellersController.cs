@@ -42,7 +42,7 @@ namespace SalesWebMvc.Controllers
             if(!ModelState.IsValid)
             {
                 List<Departament> departaments = await _departamentService.FindAllAsync();
-                SellerFormViewModel viewmodel = new() { Seller = seller, Departaments= departaments };
+                SellerFormViewModel viewmodel = new() { Seller = seller, Departaments = departaments };
                 return View(viewmodel);
             }
 
@@ -67,8 +67,15 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            await _sellerService.RemoveAsync(id);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _sellerService.RemoveAsync(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch(IntegrityException err)
+            {
+                return RedirectToAction(nameof(Error), new { message = err.Message });
+            }
         }
 
         public async Task<IActionResult> Details(int? id)
