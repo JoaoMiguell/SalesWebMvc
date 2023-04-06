@@ -1,12 +1,17 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using SalesWebMvc.Data;
 using SalesWebMvc.Services;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace SalesWebMvc
 {
@@ -22,6 +27,14 @@ namespace SalesWebMvc
                     new MySqlServerVersion(new Version(8, 0, 32)),
                     builder => builder.MigrationsAssembly("SalesWebMvc")
                 ));
+
+            CultureInfo enUs = new("en-US");
+            RequestLocalizationOptions requestLocalizationOptions = new()
+            {
+                DefaultRequestCulture = new RequestCulture(enUs),
+                SupportedCultures = new List<CultureInfo> { enUs },
+                SupportedUICultures = new List<CultureInfo> { enUs },
+            };
                 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -45,6 +58,8 @@ namespace SalesWebMvc
                 SeedingService s = new(serviceContext.GetService<SalesWebMvcContext>());
                 s.Seed();
             }*/
+
+            app.UseRequestLocalization(requestLocalizationOptions);
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
